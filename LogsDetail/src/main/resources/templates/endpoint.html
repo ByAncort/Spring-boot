@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <<title>Salfa - Proyectos</title>
+    <link rel="icon" href="/img/logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="/css/material-dashboard.css">
+</head>
+
+<style>
+    .nav-link {
+        transition: all 0.3s ease-in-out; /* Agrega una transición suave a todos los cambios de estilo */
+    }
+
+    .nav-link:hover {
+        color: #007bff; /* Cambia el color del texto al color primario de Bootstrap al pasar el mouse */
+        text-decoration: none; /* Quita la subrayado al pasar el mouse */
+        transform: scale(1.1); /* Escala el enlace al 110% del tamaño original al pasar el mouse */
+    }
+</style>
+<body class="g-sidenav-show bg-gray-200">
+<nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur" data-scroll="true" style="box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+    <div class="">
+        <a class="navbar-brand" th:href="@{/logs}">
+            <img src="/img/Salfa-logo.png" alt="Logo" width="120" height="30" class="d-inline-block align-top">
+        </a>
+    </div>
+    <!-- Enlaces de navegación -->
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" th:href="@{/logs}" >Logs</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" th:href="@{/endpoint}">endpoint</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="container mt-5 table-responsive">
+    <div class="row">
+        <div class="col-12">
+            <div class="card my-4">
+                <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                    <div class="bg-gradient-secondary shadow-secondary border-radius-lg pt-4 pb-3">
+                        <h4 class="text-white text-capitalize ps-3">Cargar Proyectos</h4>
+                    </div>
+                </div>
+                <div class="card-body px-0 pb-2 mx-3">
+                    <div class="table-responsive p-0" style="overflow-x: hidden;">
+                        <div class="col">
+                            <select id="projectIdSelect" class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
+                                <option selected value="sinMarcar">Selecciona un proyecto...</option>
+                                <!-- Aquí supongo que tu variable endpoint contiene los proyectos -->
+                                <option th:each="project : ${endpoint}" th:value="${project.projectId}" th:text="${project.name + ' | ' + project.projectId}"></option>
+                            </select>
+                            <div class="container">
+                                <div class="row justify-content-center">
+                                    <div class="col">
+                                        <div class="btn-group d-flex" role="group" aria-label="Botones">
+                                            <!-- ejecutar enpoint de project con el proyectId seleccionado  -->
+                                            <button id="project" value="project" type="button" class="btn btn-primary mx-1 rounded" onclick="guardarProyecto()">Project </button>
+                                            <!-- ejecutar enpoint de Activity con el proyectId seleccionado  -->
+                                            <button id="Activity" value="Activity"  type="button" class="btn btn-primary mx-1 rounded" onclick="guardarProyecto()">Activity </button>
+                                            <!-- ejecutar enpoint de Task con el proyectId seleccionado  -->
+                                            <button id="Task" value="Task" type="button" class="btn btn-primary mx-1 rounded" onclick="guardarProyecto()">Task </button>
+                                            <!-- ejecutar enpoint de Commitment con el proyectId seleccionado  -->
+                                            <button id="Commitment" value="Commitment" type="button" class="btn btn-primary mx-1 rounded" onclick="guardarProyecto()">Commitment</button>
+                                            <!-- ejecutar enpoint de Constraint con el proyectId seleccionado  -->
+                                            <button id="Constraint" value="Constraint" type="button" class="btn btn-primary mx-1 rounded" onclick="guardarProyecto()">Constraint</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function guardarProyecto(message) {
+        var selectElement = document.getElementById("projectIdSelect");
+        var selectedProjectId = selectElement.value;
+        if (selectedProjectId != "sinMarcar"){
+        // Obtener el ID del botón que se hizo clic
+        var buttonId = event.target.id;
+        const apis = {
+            project:"https://pokeapi.co/api/v2/pokemon/",
+            Activity:"https://www.google.cl/",
+            Task:"https://www.google.cl/",
+            Commitment:"https://www.google.cl/",
+            Constraint:"https://www.google.cl/"
+        };
+             var url = apis[buttonId] + d;
+            // Hacer una solicitud GET a la URL
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    alert(`${selectedProjectId} está siendo cargado. Se le redirigirá a los Logs.`);
+                    window.location.href = "/logs";
+                })
+                .catch(error => {
+                    console.error('Error al hacer la solicitud:', error);
+                    alert('Hubo un error al realizar la solicitud.');
+                });
+
+            // funcion para abrir la api en otra ventana
+            // window.open(url, "_blank");
+            //window.location.href = "/logs";
+            //  }else{
+            //      alert("Por favor, selecciona un proyecto antes de continuar.");
+            //    return;
+        }
+
+    }
+</script>
+
+</body>
+</html>

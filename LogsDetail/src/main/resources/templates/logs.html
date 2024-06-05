@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Salfa - Logs</title>
+    <link rel="icon" href="/img/logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="/css/material-dashboard.css">
+
+</head>
+<style>
+    .table-container {
+        max-height: 300px; /* Establece la altura máxima de la tabla */
+    }
+
+    .table-wrapper {
+        overflow-x: auto; /* Permite el desplazamiento horizontal si es necesario */
+    }
+
+    .table-scrollbar {
+        overflow-y: auto; /* Agrega desplazamiento vertical */
+        max-height: 400px; /* Establece la altura máxima de la tabla dentro del contenedor */
+    }
+    .nav-link {
+        transition: all 0.3s ease-in-out; /* Agrega una transición suave a todos los cambios de estilo */
+    }
+
+    .nav-link:hover {
+        color: #007bff; /* Cambia el color del texto al color primario de Bootstrap al pasar el mouse */
+        text-decoration: none; /* Quita la subrayado al pasar el mouse */
+        transform: scale(1.1); /* Escala el enlace al 110% del tamaño original al pasar el mouse */
+    }
+</style>
+<body class="g-sidenav-show  bg-gray-200">
+<nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur" data-scroll="true" style="box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+    <div class="">
+        <a class="navbar-brand" th:href="@{/logs}">
+            <img src="/img/Salfa-logo.png" alt="Logo" width="120" height="30" class="d-inline-block align-top">
+        </a>
+    </div>
+    <!-- Enlaces de navegación -->
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav mr-auto"> <!-- Cambio realizado aquí -->
+            <li class="nav-item active">
+                <a class="nav-link active" th:href="@{/logs}" >Logs</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link " th:href="@{/endpoint}">endpoint</a>
+            </li>
+        </ul>
+    </div>
+
+    <form th:action="@{/logs}" method="get" class="form-inline">
+        <div class="d-flex mt-4">
+            <div class="col">
+                <div class="input-group input-group-outline">
+                    <input type="date" name="date" class="form-control" th:value="${date}" />
+                </div>
+            </div>
+            <div class="col" style="margin-left: 1rem;">
+                <button type="submit" class="btn btn-outline-primary btn-sm ml-2">Filtrar</button>
+            </div>
+        </div>
+    </form>
+</nav>
+
+
+
+<div class="container mt-5 table-container">
+    <div class="row">
+        <div class="col-12">
+            <div class="card my-4">
+                <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                    <div class="bg-gradient-secondary shadow-secondary border-radius-lg pt-4 pb-3">
+                        <h4 class="text-white text-capitalize ps-3">Logs Salfa</h4>
+                    </div>
+                </div>
+                <div class="card-body px-0 pb-2">
+                    <div class="table-wrapper">
+                        <div class="table-responsive table-scrollbar">
+                            <table class="table align-items-center mb-0">
+                                <thead>
+                                <tr>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Log ID</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Descripción</th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Fecha y Hora</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="log : ${logs}">
+                                    <td th:text="${log.logID}"></td>
+                                    <td th:text="${log.descripcion}"></td>
+                                    <td th:text="${log.fechaHora}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>
