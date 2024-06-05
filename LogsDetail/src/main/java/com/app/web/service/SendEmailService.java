@@ -8,22 +8,19 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class SendEmailService {
-@Autowired
+
+    @Autowired
     private JavaMailSender javaMailSender;
 
-    @Value("$(spring.mail.username)")
+    @Value("${spring.mail.username}")
     private String fromEmailId;
-    public void sendEmail(String recipient, String body,String subject){
 
-        SimpleMailMessage simpleMailMessage= new SimpleMailMessage();
-        simpleMailMessage.setFrom("byancort@gmail.com");
+    public void sendEmail(String recipient, String body, String subject) {
+        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+        simpleMailMessage.setFrom(fromEmailId);
         simpleMailMessage.setTo(recipient);
         simpleMailMessage.setText(body);
         simpleMailMessage.setSubject(subject);
-
-
         javaMailSender.send(simpleMailMessage);
     }
-
-
 }
