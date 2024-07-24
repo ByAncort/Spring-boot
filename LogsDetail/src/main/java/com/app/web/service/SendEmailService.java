@@ -15,10 +15,16 @@ public class SendEmailService {
     @Value("${spring.mail.username}")
     private String fromEmailId;
 
-    public void sendEmail(String recipient, String body, String subject) {
+    public SendEmailService(JavaMailSender javaMailSender) {
+        this.javaMailSender = javaMailSender;
+
+    }
+
+    // Método para enviar correo a uno o más destinatarios
+    public void sendEmail(String[] recipients, String body, String subject) {
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         simpleMailMessage.setFrom(fromEmailId);
-        simpleMailMessage.setTo(recipient);
+        simpleMailMessage.setTo(recipients); // Acepta múltiples destinatarios
         simpleMailMessage.setText(body);
         simpleMailMessage.setSubject(subject);
         javaMailSender.send(simpleMailMessage);

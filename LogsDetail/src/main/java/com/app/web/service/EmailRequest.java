@@ -1,25 +1,16 @@
 package com.app.web.service;
 
 public class EmailRequest {
-    private String recipient;
-    private String subject;
+    private String[] recipients;
     private String body;
+    private String subject;
 
-    // Getters y Setters
-    public String getRecipient() {
-        return recipient;
+    public String[] getRecipients() {
+        return recipients;
     }
 
-    public void setRecipient(String recipient) {
-        this.recipient = recipient;
-    }
-
-    public String getSubject() {
-        return subject;
-    }
-
-    public void setSubject(String subject) {
-        this.subject = subject;
+    public void setRecipients(String[] recipients) {
+        this.recipients = recipients;
     }
 
     public String getBody() {
@@ -28,5 +19,13 @@ public class EmailRequest {
 
     public void setBody(String body) {
         this.body = body;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
     }
 }

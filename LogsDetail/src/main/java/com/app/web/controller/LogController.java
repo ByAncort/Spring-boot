@@ -5,6 +5,7 @@ import com.app.web.entity.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,22 +20,24 @@ public class LogController {
     private JdbcTemplate jdbcTemplate;
 
     @GetMapping("/logs")
-    public String showLogs(
-            @RequestParam(value = "date", required = false) String date,
-            Model model) {
+    public String showLogs(@RequestParam(value = "date", required = false) String date, Model model) {
+        String sql = "SELECT * FROM logs ORDER BY fechahora DESC";
+        String sql2 = "SELECT * FROM logs";
+        List<Log> logs;
 
-        String sql = "SELECT * FROM logs ORDER BY  fechahora DESC";
-
-        if (date != null) {
-            sql += " WHERE CONVERT(date, fechaHora) = ?";
-            List<Log> logs = jdbcTemplate.query(sql, new Object[]{date}, BeanPropertyRowMapper.newInstance(Log.class));
+        try {
+            if (date != null) {
+                sql2 += " WHERE CONVERT(date, fechaHora) = ?";
+                logs = jdbcTemplate.query(sql2, new Object[]{date}, new BeanPropertyRowMapper<>(Log.class));
+            } else {
+                logs = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Log.class));
+            }
             model.addAttribute("logs", logs);
-        } else {
-            List<Log> logs = jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(Log.class));
-            model.addAttribute("logs", logs);
+            model.addAttribute("date", date);
+        } catch (Exception e) {
+            e.printStackTrace();
+            model.addAttribute("error", "Ocurrió un error al recuperar los registros. Por favor, intenta de nuevo más tarde.");
         }
-
-        model.addAttribute("date", date);
 
         return "logs";
     }
@@ -42,11 +45,13 @@ public class LogController {
     @GetMapping("/endpoint")
     public String endpoint(Model model) {
         String sql = "SELECT * FROM allproject";
-        List<Endpoint> endpoint = jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(Endpoint.class));
-        model.addAttribute("endpoint", endpoint);
+        try {
+            List<Endpoint> endpoint = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Endpoint.class));
+            model.addAttribute("endpoint", endpoint);
+        } catch (Exception e) {
+            e.printStackTrace();
+            model.addAttribute("error", "Ocurrió un error al recuperar los endpoints. Por favor, intenta de nuevo más tarde.");
+        }
         return "endpoint";
     }
-
-
-
 }
